@@ -26,4 +26,19 @@ public class Squad {
             System.out.println("HERO ISN'T REGISTERED");
         }
     }
+    public String getName() {
+        return squadName;
+    }
+
+    public int getSquadId() {
+        return squadId;
+    }
+
+    public void addMembers(models.Hero hero) {
+        if (heroMembers.size() >= 3) {
+            isSquadFull = true;
+        } else {
+            heroMembers.add(hero);
+        }
+    }
 }
