@@ -36,4 +36,9 @@ public class SquadTest {
         Squad squad = setupNewSquad(setupNewHero());
         assertTrue(squad.getName() instanceof String);
     }
+    @Test
+    public void getSquadCause() {
+        Squad squad = setupNewSquad(setupNewHero());
+        assertTrue(squad.getCause() instanceof String);
+    }
 }
