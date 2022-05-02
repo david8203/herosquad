@@ -1,5 +1,6 @@
 import models.Hero;
 import models.Squad;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -97,4 +98,9 @@ public class SquadTest {
         assertEquals(0, squad.getMembers().size());
         assertEquals(2, squad2.getMembers().size());
     }
+    @After
+    public void tearDown() throws Exception {
+        Hero.clearHeroRegistry();
+    }
+
 }
