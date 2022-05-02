@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.reflect.Array.get;
-import static spark.Spark.port;
-import static spark.Spark.staticFileLocation;
+import static spark.Spark.*;
 
 public class App {
     public static void main(String[] args) {
@@ -44,6 +43,21 @@ public class App {
             model.put("squadfullHeroes", squadfullHeroes);
             model.put("uniqueId", request.session().attribute("uniqueId"));
             return new ModelAndView(model, "index.hbs");
+        }, new HandlebarsTemplateEngine());
+        //post: store user session - redirect back home
+
+        post("/success", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            String uniqueId = request.queryParams("uniqueId");
+            request.session().attribute("uniqueId", uniqueId);
+            model.put("uniqueId", uniqueId);
+            return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
+        //get: create hero page
+        get("/heroes/new", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put("uniqueId", request.session().attribute("uniqueId"));
+            return new ModelAndView(model, "hero-form.hbs");
         }, new HandlebarsTemplateEngine());
 
     }
