@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static java.lang.reflect.Array.get;
 import static spark.Spark.*;
-
+@SuppressWarnings("unused")
 public class App {
     public static void main(String[] args) {
         staticFileLocation("/public");
@@ -105,6 +105,45 @@ public class App {
             }
             assert squadFounder != null;
             Squad newSquad = new Squad(name, cause, squadFounder);
+            return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
+        //get: retrieve all heroes and squads
+        get("/heroes", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put("allHeroes", Hero.getHeroRegistry());
+            model.put("allSquads", Squad.getAllSquads());
+            model.put("uniqueId", request.session().attribute("uniqueId"));
+            return new ModelAndView(model, "heroes-squads.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        //get: each hero detail page
+        get("/heroes/:id", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int itemId = Integer.parseInt(request.params(":id"));
+            Hero foundHero = Hero.findHero(itemId);
+            model.put("hero", foundHero);
+            model.put("uniqueId", request.session().attribute("uniqueId"));
+            return new ModelAndView(model, "hero-details.hbs");
+        }, new HandlebarsTemplateEngine());
+        //get: each squad detail page
+        get("/squads/:id", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int itemId = Integer.parseInt(request.params(":id"));
+            Squad foundSquad = Squad.findSquad(itemId);
+            model.put("squad", foundSquad);
+            model.put("uniqueId", request.session().attribute("uniqueId"));
+            return new ModelAndView(model, "squad-details.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        //Post: update hero details
+        post("/heroes/:id/update", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int itemId = Integer.parseInt(request.params(":id"));
+            Hero updateHero = Hero.findHero(itemId);
+            updateHero.updateName(request.queryParams("name"));
+            updateHero.updateAge(Integer.parseInt(request.queryParams("age")));
+            updateHero.updatePower(request.queryParams("power"));
+            updateHero.updateWeakness(request.queryParams("weakness"));
             return new ModelAndView(model, "success.hbs");
         }, new HandlebarsTemplateEngine());
 
