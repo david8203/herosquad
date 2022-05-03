@@ -1,0 +1,1 @@
+web: java -jar target/herosquad2022-1.0-jar-with-dependencies.jar
