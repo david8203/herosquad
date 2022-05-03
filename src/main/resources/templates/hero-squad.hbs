@@ -1,0 +1,46 @@
+{{#partial "navbar"}}
+    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+    <li class="nav-item"><a class="nav-link" href="/heroes/new">Recruit a New Hero</a></li>
+    <li class="nav-item"><a class="nav-link" href="/squads/new">Create a New Squad</a></li>
+    <li class="nav-item active"><a class="nav-link" href="/heroes">All Heroes & Squads</a></li>
+    <li class="nav-item"><a class="nav-link" href="/faqs">FAQs</a></li>
+{{/partial}}
+
+
+{{#partial "content"}}
+    <h2 class="text-center">Classified Information</h2>
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <h5 class="text-center"><u>Heroes</u></h5>
+            {{#if allHeroes}}
+                <div class="card heroSquadCard">
+                    <ul class="list-group list-group-flush">
+                        {{#each allHeroes}}
+                            <li class="list-group-item">{{name}} - <a href="/heroes/{{heroID}}">View Details</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+            {{else}}
+                <p>No hero registered at the moment, check again in a while.</p>
+            {{/if}}
+        </div>
+
+        <div class="col-md-6 text-center">
+            <h5><u>Squads</u></h5>
+            {{#if allSquads}}
+                <div class="card heroSquadCard">
+                    <ul class="list-group list-group-flush">
+                        {{#each allSquads}}
+                            <li class="list-group-item">{{name}} - <a href="/squads/{{squadId}}">View Details</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+            {{else}}
+                <p>No squads have been formed, check again in a while.</p>
+            {{/if}}
+        </div>
+    </div>
+
+{{/partial}}
+
+{{> layout.hbs}}

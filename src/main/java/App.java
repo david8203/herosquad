@@ -1,3 +1,5 @@
+import static spark.Spark.*;
+
 import models.Hero;
 import models.Squad;
 import spark.ModelAndView;
@@ -8,8 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.reflect.Array.get;
-import static spark.Spark.*;
 @SuppressWarnings("unused")
 public class App {
     public static void main(String[] args) {
@@ -145,6 +145,49 @@ public class App {
             updateHero.updatePower(request.queryParams("power"));
             updateHero.updateWeakness(request.queryParams("weakness"));
             return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
+        //get: remove single hero
+        get("/heroes/:id/remove", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int itemId = Integer.parseInt(request.params(":id"));
+            Hero.deleteHero(itemId);
+            model.put("uniqueId", request.session().attribute("uniqueId"));
+            return new ModelAndView(model, "heroes-squads.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        //Post: Update squad members by recruiting
+        post("/squads/:id/update", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int itemId = Integer.parseInt(request.params(":id"));
+            Squad foundSquad = Squad.findSquad(itemId);
+            String heroName = request.queryParams("addHero");
+            Hero heroToAdd = null;
+            for (Hero hero : Hero.getHeroRegistry()) {
+                if (hero.getName().equalsIgnoreCase(heroName)) {
+                    heroToAdd = hero;
+                    break;
+                }
+            }
+            foundSquad.changeHeroSquad(heroToAdd, foundSquad);
+            model.put("uniqueId", request.session().attribute("uniqueId"));
+            return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        //get: Update squad
+        get("/squads/:id/update", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int itemId = Integer.parseInt(request.params(":id"));
+            Squad foundSquad = Squad.findSquad(itemId);
+            List<Hero> nonMembers = new ArrayList<>();
+            for (Hero hero : Hero.getHeroRegistry()) {
+                if (!hero.getSquadAlliance().equalsIgnoreCase(foundSquad.getName())) {
+                    nonMembers.add(hero);
+                }
+            }
+            model.put("nonMembers", nonMembers);
+            model.put("squad", foundSquad);
+            model.put("uniqueId", request.session().attribute("uniqueId"));
+            return new ModelAndView(model, "update-form.hbs");
         }, new HandlebarsTemplateEngine());
 
 
