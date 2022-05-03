@@ -59,6 +59,16 @@ public class App {
             model.put("uniqueId", request.session().attribute("uniqueId"));
             return new ModelAndView(model, "hero-form.hbs");
         }, new HandlebarsTemplateEngine());
+        //post: submit a new hero - redirect to success page
+        post("/heroes/new", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            String name = request.queryParams("name");
+            int age = Integer.parseInt(request.queryParams("age"));
+            String power = request.queryParams("power");
+            String weakness = request.queryParams("weakness");
+            Hero newHero = new Hero(name, age, power, weakness);
+            return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
 
     }
 
