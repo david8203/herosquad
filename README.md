@@ -20,6 +20,7 @@ ___
 - **Weakness**
 
 - **Affiliated Squad**
+___
   ## Built With: ##
   1. HTML
   2. Handlebars/Moustache 
@@ -28,7 +29,7 @@ ___
   5. Gradle 
   6. Spark 
   7. Junit
-
+___
 
 ## Prerequisites ##
 ___
@@ -39,7 +40,7 @@ ___
 > * Some prior knowledge of Java 
 > * Some prior knowledge of Spark framework (optional)
 > * Java IDE
-
+___
 
 # Setup Guide #
 - Run `java --version` to check which version of java you have **installed** in your device.
